@@ -16,7 +16,7 @@ Explore the docs: [Formal Conjectures Documentation](https://google-deepmind.git
 Join our [channel on the leanprover Zulip](https://leanprover.zulipchat.com/#narrow/channel/524981-Formal-conjectures)
  
 ---
- 
+
 ## Sun (2,4,6,8) Conjecture & Fiber Geometry Extension
  
 This fork extends the Formal Conjectures repository with a computational and geometric study of Sun's (2,4,6,8) representation problem.
@@ -53,7 +53,7 @@ The extension is organised into four layers:
  
 | Layer | Object | Main question | Status |
 |-------|--------|---------------|--------|
-| Algebraic | $\Phi: \mathbb{Z}_{\geq 0}^4 	o \mathbb{Z}_{>0}$ | What is the underlying polynomial map? | `[FORMAL]` / `[EST]` |
+| Algebraic | $\Phi: \mathbb{Z}_{\geq 0}^4 \to \mathbb{Z}_{>0}$ | What is the underlying polynomial map? | `[FORMAL]` / `[EST]` |
 | Complex geometry | $\mathcal{F}_n^{\mathbb{C}}$ | Do complex solutions exist? | `[EST]` |
 | Real geometry | $\mathcal{F}_n^{\mathbb{R}}$ | Do real solutions exist? | `[EST]` |
 | Integer lattice | $\mathcal{F}_n^{\mathbb{Z}}$ | Does the fiber contain admissible integer points? | `[COMP]` / `[OPEN]` |
@@ -62,16 +62,11 @@ The extension is organised into four layers:
 The central geometric insight is that these are **distinct** questions:
  
 $$
-\mathcal{F}_n^{\mathbb{C}} 
-eq \emptyset
-\quad 
-ot\Rightarrow \quad
-\mathcal{F}_n^{\mathbb{R}} 
-eq \emptyset
-\quad 
-ot\Rightarrow \quad
-\mathcal{F}_n^{\mathbb{Z}} 
-eq \emptyset.
+\mathcal{F}_n^{\mathbb{C}} \neq \emptyset
+\quad\not\Rightarrow\quad
+\mathcal{F}_n^{\mathbb{R}} \neq \emptyset
+\quad\not\Rightarrow\quad
+\mathcal{F}_n^{\mathbb{Z}} \neq \emptyset.
 $$
  
 A continuous solution does not imply an integer representation.
@@ -89,8 +84,17 @@ A continuous solution does not imply an integer representation.
   For $n^*$, an explicit real non-integer solution is given by
  
   $$
-  (w,x,y,z)=(42{,}339{,}774.4,\ 4,\ 6,\ 8).
+  (w,x,y,z)\approx(42{,}339{,}481.2,\ 4,\ 6,\ 8).
   $$
+ 
+  Here $w \approx 42{,}339{,}481.2$ is the positive real root of
+  $C(w,2) = n^* - C(4,4) - C(6,6) - C(8,8) = n^* - 3$,
+  i.e.,
+  $$
+  \frac{w(w-1)}{2}=896{,}315{,}812{,}331{,}396.
+  $$
+ 
+  This is a decimal approximation; $w$ is not an integer.
  
   These solutions illustrate that the absence of admissible integer representations does not imply the absence of continuous real or complex solutions.
  
@@ -99,7 +103,7 @@ A continuous solution does not imply an integer representation.
   The map
  
   $$
-  \Phi_{\mathbb{C}}:\mathbb{C}^4ightarrow\mathbb{C}
+  \Phi_{\mathbb{C}}:\mathbb{C}^4\to\mathbb{C}
   $$
  
   is mathematically established as surjective, using the fact that
@@ -287,12 +291,12 @@ If your work has used formal-conjectures, please consider citing it via:
 }
  
 @article{FormalConjecturesPaper,
-  author  = {Firsching, Moritz and Lezeau, Paul and Mercuri, Salvatore
+  author = {Firsching, Moritz and Lezeau, Paul and Mercuri, Salvatore
              and Horv{'a}th, Mikl{'o}s Z and Dillies, Ya{"e}l and S{"o}nne, Calle
              and Wieser, Eric and Zhang, Fred and Hubert, Thomas
              and Ag{"u}era y Arcas, Blaise and Kohli, Pushmeet},
   title   = {{F}ormal {C}onjectures: {A}n {O}pen and {E}volving {B}enchmark for
-             {V}erified {D}iscovery in {M}athematics},
+             {Verified Discovery in Mathematics},
   year    = {2026},
   url     = {https://arxiv.org/abs/2605.13171v1},
 }
@@ -356,4 +360,3 @@ See the licenses for the specific language governing permissions and limitations
 ---
  
 **This is not an official Google product.**
- 
