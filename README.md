@@ -19,30 +19,141 @@ Join our [channel on the leanprover Zulip](https://leanprover.zulipchat.com/#nar
 
 This fork extends the Formal Conjectures repository with a computational and geometric study of Sun's (2,4,6,8) representation problem.
 
-The focus is not only on representation counts but also on the geometry of representation fibers and the interaction between continuous fibers and the integer lattice:
+The focus centers on the fiber geometry of
 
-- **Explicit Complex & Real Solutions**: Constructed for $-n^*$ using
+$$
+n^* = 896,315,812,331,399
+$$
+
+and on the interaction between continuous fibers and the integer lattice.
+
+### Research Status
+
+The labels below distinguish the current epistemic status of the results presented in this extension:
+
+- **`[EST]` — Established**: Supported by an explicit mathematical derivation and/or Lean formal verification.
+- **`[COMP]` — Computationally established**: Supported by computational verification, numerical analysis, or exhaustive computation within the stated search domain.
+
+These labels are intentionally conservative and do not imply that every result has been formalised as a complete theorem in Lean.
+
+### Fiber Geometry
+
+- **Explicit Complex & Real Solutions `[EST]`**
+
+  For $-n^*$, an explicit complex solution is constructed at $x=y=z=0$:
+
   $$
-  w = \frac{1 + i\sqrt{7,170,526,498,651,191}}{2},
-  $$
-  and for $n^*$ using the real non-integer solution
-  $$
-  (42,339,774.4,\ 4,\ 6,\ 8).
+  w =
+  \frac{1+i\sqrt{7,170,526,498,651,191}}{2}.
   $$
 
-- **Surjectivity of $\Phi_{\mathbb{C}}$**: Formally established that
-  $\Phi_{\mathbb{C}}:\mathbb{C}^4 \to \mathbb{C}$ is surjective, ensuring complex fibers are smooth 3-manifolds without complex zero-fibers.
+  For $n^*$, an explicit real non-integer solution is given by
 
-- **The Central Geometric Paradox**: Explores why smooth continuous real fibers, such as $\mathcal{F}_{n^*}^{\mathbb{R}}$, can possess infinite volume yet completely avoid all admissible integer lattice points:
   $$
-  R_{\mathbb{Z}}(n^*) = 0.
+  (w,x,y,z)=(42,339,774.4,\ 4,\ 6,\ 8).
   $$
+
+  These solutions illustrate that the absence of admissible integer representations does not imply the absence of continuous real or complex solutions.
+
+- **Surjectivity of $\Phi_{\mathbb{C}}$ `[EST]`**
+
+  The map
+
+  $$
+  \Phi_{\mathbb{C}}:\mathbb{C}^4\rightarrow\mathbb{C}
+  $$
+
+  is formally established as surjective, using the fact that
+
+  $$
+  B_2(\mathbb{C})=\mathbb{C}.
+  $$
+
+  Consequently, every complex target value has a non-empty complex fiber. Under the corresponding smoothness conditions, these fibers have complex dimension $3$.
+
+- **The Central Geometric Paradox `[COMP]`**
+
+  The fiber
+
+  $$
+  \mathcal{F}_{n^*}^{\mathbb{R}}
+  $$
+
+  is computationally shown to be non-empty and to contain continuous real solutions, while the corresponding admissible integer lattice contains no representation:
+
+  $$
+  R_{\mathbb{Z}}(n^*)=0.
+  $$
+
+  Thus, a continuous real fiber can exist without intersecting the discrete admissible lattice.
+
+- **Distributed Local Obstruction (DLO) `[EST]`**
+
+  A distributed local-obstruction framework studies how prime-adic constraints can prevent integer points from entering the fiber.
+
+  In particular, prime certificates and non-residue conditions provide local obstructions that can be combined to exclude admissible integer representations.
+
+  The corresponding Lean 4 formalisation provides machine-checkable support for the stated local obstruction results.
+
+### Three-Layer Geometric Framework
+
+The current research distinguishes three mathematically different structures:
+
+1. **Complex fiber**
+
+   $$
+   \mathcal{F}_{n}^{\mathbb{C}}
+   =
+   \{(w,x,y,z)\in\mathbb{C}^4:\Phi_{\mathbb{C}}(w,x,y,z)=n\}.
+   $$
+
+   The complex setting provides the broadest continuous algebraic structure.
+
+2. **Real fiber**
+
+   $$
+   \mathcal{F}_{n}^{\mathbb{R}}
+   =
+   \mathcal{F}_{n}^{\mathbb{C}}\cap\mathbb{R}^4.
+   $$
+
+   The real fiber describes continuous real solutions and may remain non-empty even when integer representations are absent.
+
+3. **Integer lattice fiber**
+
+   $$
+   \mathcal{F}_{n}^{\mathbb{Z}}
+   =
+   \mathcal{F}_{n}^{\mathbb{R}}
+   \cap
+   \mathbb{Z}_{\mathrm{adm}}^4,
+   $$
+
+   where $\mathbb{Z}_{\mathrm{adm}}^4$ denotes the admissible integer domain of the original representation problem.
+
+   The representation count is then determined by the cardinality of this discrete intersection:
+
+   $$
+   R_{\mathbb{Z}}(n)
+   =
+   \#\mathcal{F}_{n}^{\mathbb{Z}}.
+   $$
+
+This framework separates three questions that are often conflated:
+
+- Does a complex solution exist?
+- Does a real solution exist?
+- Does an admissible integer solution exist?
+
+The fiber geometry shows that these are distinct questions.
 
 ---
 
 ## Goals
 
-While there is a growing corpus of formalised theorems including proofs, there is a lack of open conjectures where only the statement has been formalised. This would be useful for a few reasons. It could:
+While there is a growing corpus of formalised theorems including proofs, there is a lack of open conjectures where only the statement has been formalised.
+
+This would be useful for a few reasons. It could:
 
 - Become a great benchmark for automated theorem provers and automated formalisation tools.
 - Help clarify the precise meaning of conjectures through formalisation.
@@ -52,9 +163,11 @@ It is our hope that this initiative will form the seed of a much richer dataset 
 
 ### Note on Formalisation Accuracy
 
-Formalizing mathematical statements without proofs is inherently challenging. Subtle inaccuracies can arise where the formal statement might not perfectly capture the nuances of the original conjecture.
+Formalizing mathematical statements without proofs is inherently challenging.
 
-To mitigate this issue, we will rely on careful human review of contributions, and plan to periodically leverage AlphaProof to help identify potential misformalisations.
+Subtle inaccuracies can arise where the formal statement might not perfectly capture the nuances of the original conjecture. To mitigate this issue, we will rely on careful human review of contributions, and plan to periodically leverage AlphaProof to help identify potential misformalisations.
+
+The additional results in the Sun (2,4,6,8) fiber-geometry extension should therefore be interpreted according to their stated research-status labels rather than as claims that every result has already been fully formalised.
 
 ---
 
@@ -130,10 +243,10 @@ If your work has used formal-conjectures, please consider citing it via:
 
 ```bibtex
 @misc{FormalConjectures,
-  author       = {{The Formal Conjectures Authors}},
-  title        = {{T}he {F}ormal {C}onjectures {R}epository},
-  year         = {2025},
-  url          = {https://github.com/google-deepmind/formal-conjectures},
+  author = {{The Formal Conjectures Authors}},
+  title  = {{T}he {F}ormal {C}onjectures {R}epository},
+  year   = {2025},
+  url    = {https://github.com/google-deepmind/formal-conjectures},
 }
 
 @article{FormalConjecturesPaper,
