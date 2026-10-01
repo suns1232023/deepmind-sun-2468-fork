@@ -36,6 +36,14 @@ states a negative answer. Also check the scope and expected type of `answer(sorr
 the statement must constrain the unknown answer. It must not make the theorem true for every
 possible answer.
 
+## Special Guidelines for Fiber Geometry & Binomial Representations
+
+When formalizing advanced arithmetic geometry and continuous fiber extensions (such as Sun's (2,4,6,8) conjecture and its fiber geometry modules):
+
+- **Distinguish Continuous Existence from Discrete Absence**: Ensure that statements explicitly separate the non-emptiness of continuous/real/complex fibers ($\mathcal{F}_{z}^{\mathbb{C}}$ or $\mathcal{F}_{n}^{\mathbb{R}}$ being smooth manifolds) from the zero-fiber property over the integer lattice ($R_{\mathbb{Z}}(n) = 0$).
+- **Explicit Solution Validation**: For complex or real solutions at specific targets (e.g., $-n^*$ or $n^*$), verify that discriminants, square roots, and algebraic parameters match exact closed-form expressions (such as $w = \frac{1 + i\sqrt{7,170,526,498,651,191}}{2}$).
+- **Distributed Local Obstructions (DLO)**: When stating p-adic or prime certificate conditions, ensure domain restrictions on prime parameters and residue classes (e.g., $p \equiv 2 \pmod 3$) are precisely bounded.
+
 ## Check boundary cases
 
 Substitute the smallest permitted value of each parameter. Check empty types, empty sets, zero,
