@@ -83,8 +83,7 @@ A continuous solution does not imply an integer representation.
   For $-n^*$, an explicit complex solution is constructed at $x=y=z=0$:
  
   $$
-  w =
-  \frac{1+i\sqrt{7{,}170{,}526{,}498{,}651{,}191}}{2}.
+  w = \frac{1+i\sqrt{7{,}170{,}526{,}498{,}651{,}191}}{2}.
   $$
  
   For $n^*$, an explicit real non-integer solution is given by
@@ -103,7 +102,7 @@ A continuous solution does not imply an integer representation.
   \Phi_{\mathbb{C}}:\mathbb{C}^4ightarrow\mathbb{C}
   $$
  
-  is formally established as surjective, using the fact that
+  is mathematically established as surjective, using the fact that
  
   $$
   B_2(\mathbb{C})=\mathbb{C}.
@@ -113,13 +112,7 @@ A continuous solution does not imply an integer representation.
  
 - **Computational Status of $n^*$ `[COMP]`**
  
-  The fiber
- 
-  $$
-  \mathcal{F}_{n^*}^{\mathbb{R}}
-  $$
- 
-  is computationally shown to be non-empty and to contain continuous real solutions. Within the stated admissible search domain, the computational audit finds
+  The fiber $\mathcal{F}_{n^*}^{\mathbb{R}}$ is computationally shown to be non-empty and to contain continuous real solutions. Within the stated admissible search domain, the computational audit finds
  
   $$
   R_{\mathbb{Z}}(n^*)=0.
@@ -221,8 +214,6 @@ Contributions are most welcome — consider adding (or even just opening an issu
  
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full contribution guide, including ways to contribute, the step-by-step process, file structure conventions, attribute usage, and style guidelines.
  
-For contributions to the Sun (2,4,6,8) extension specifically, see the research-status labels above and the guidelines in [CONTRIBUTING.md](./CONTRIBUTING.md#sun-2468-research-extension).
- 
 ---
  
 ## Usage, Structure & Features
@@ -314,7 +305,7 @@ For the Sun (2,4,6,8) fiber geometry extension:
   author = {Sun, Scott},
   title  = {Sun (2,4,6,8) Fiber Geometry Extension},
   year   = {2026},
-  url    = {https://github.com/suns1232023/scottsun.com},
+  url    = {https://github.com/suns1232023/deepmind-sun-2468-fork},
   note   = {Independent fork of google-deepmind/formal-conjectures.
             ORCID: 0009-0002-1095-6228},
 }
