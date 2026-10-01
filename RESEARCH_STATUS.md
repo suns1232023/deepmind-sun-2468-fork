@@ -1,181 +1,258 @@
-# Toolchain Compatibility Analysis
+# Research Status
 
-## Summary
+## Purpose
 
-| Item | This Fork | External Disproof |
-|------|-----------|-------------------|
-| Lean version | 4.33.1 | 4.27.0 |
-| Mathlib version | (follows lean-toolchain) | v4.27.0 |
-| Status | Current | Older release |
+This document records the evidentiary status of all results in the Sun (2,4,6,8) research extension. It is the authoritative reference for evidence levels.
 
----
+README.md provides a summary for general readers. This document provides the full record for mathematical reviewers.
 
-## The Compatibility Question
-
-The external Lean disproof (epoch-research/LeanOpenProblems-results, commit fd09021) was developed with **Lean 4.27.0 / Mathlib v4.27.0**.
-
-This fork uses **Lean 4.33.1**.
-
-The question is: does the external proof still build and verify correctly under Lean 4.33.1?
+**Last updated:** 2026-10-01
 
 ---
 
-## Why This Matters
+## Evidence Levels
 
-The `formal_proof` annotation in this fork links to the external proof as a reference. For this annotation to be fully justified:
+| Label | Definition | Lean required? | Scope |
+|-------|-----------|----------------|-------|
+| `[FORMAL]` | Lean 4 kernel-checked proof. `#print axioms` confirms no unexpected axioms. No `sorry`. | Yes | As stated in theorem |
+| `[EST]` | Explicit mathematical derivation. Checkable by a mathematician. Does **not** imply Lean formalisation. | Not necessarily | As stated in derivation |
+| `[COMP]` | Computationally verified within an explicitly stated finite domain. Reproducible script provided. | No | Stated finite domain only |
+| `[NUM]` | Numerical experiment, heuristic, or approximate evidence. | No | As stated |
+| `[OPEN]` | Open question. No proof or computational verification established. | — | — |
 
-1. The external proof must build without errors under the referenced toolchain.
-2. The proof must not rely on any axioms or tactics that changed semantics between 4.27.0 and 4.33.1.
-3. The `decide` and kernel-checking steps must produce the same result.
+### Critical distinctions
 
----
-
-## Risk Assessment
-
-### Low risk
-
-- **Core logic**: The mathematical content (binomial coefficients, Finset operations, `decide` for finite computations) is stable across Lean 4.x releases.
-- **`decide` tactic**: The `decide` tactic calls the kernel evaluator, which is highly stable. The 19 chunk verifications using `decide + kernel` are unlikely to be affected by minor version changes.
-- **Mathlib API**: The basic Finset and Nat.choose APIs used in the proof are stable.
-
-### Medium risk
-
-- **`native_decide`**: If the external proof uses `native_decide` (which compiles to native code), results may differ across versions due to compiler changes. The external proof appears to use `decide` (kernel-checked), not `native_decide`, which reduces this risk.
-- **Elaboration changes**: Minor elaboration changes between 4.27.0 and 4.33.1 could cause type-checking failures in edge cases.
-
-### Mitigation options
-
-Three options are available:
+- `[EST]` does **not** imply `[FORMAL]`.
+- `[COMP]` is **always domain-bounded**. A computational absence result is not a global theorem.
+- A local obstruction is **not** a global obstruction unless the logical implication has been established.
+- A complex or real solution is **not** an integer representation.
+- `lake build` success does **not** imply a theorem is proved.
 
 ---
 
-## Option A: Pin to external proof's toolchain (Recommended for audit)
+## The Sun (2,4,6,8) Conjecture
 
-Temporarily downgrade this fork's `lean-toolchain` to match the external proof:
+**Conjecture (Sun, 2019).** Every positive integer $n$ can be written as
+
+$$n = \binom{w}{2} + \binom{x}{4} + \binom{y}{6} + \binom{z}{8}, \qquad w,x,y,z \geq 0.$$
+
+**Upstream Lean formulation (OEIS A306477, PR #1570):**
+
+$$\forall n > 0,\; \exists\, w,x,y,z \in \mathbb{N},\; \binom{w+2}{2} + \binom{x+3}{4} + \binom{y+5}{6} + \binom{z+7}{8} = n.$$
+
+**Reference:** OEIS [A306477](https://oeis.org/A306477).
+
+---
+
+## Current Results
+
+### 1. Algebraic Structure
+
+| Result | Status | Evidence | Scope |
+|--------|--------|----------|-------|
+| Definition of $\Phi: \mathbb{Z}_{\geq 0}^4 \to \mathbb{Z}_{>0}$ | `[FORMAL]` | Lean 4 definition | All non-negative integers |
+| Polynomial form of $\Phi$ | `[EST]` | Explicit computation | All non-negative integers |
+
+---
+
+### 2. Complex Fiber
+
+| Result | Status | Evidence | Scope |
+|--------|--------|----------|-------|
+| Surjectivity of $\Phi_{\mathbb{C}}: \mathbb{C}^4 \to \mathbb{C}$ | `[EST]` | Explicit derivation | $\mathbb{C}^4 \to \mathbb{C}$ |
+| Complex fiber $\mathcal{F}_n^{\mathbb{C}}$ non-empty for all $n$ | `[EST]` | Follows from surjectivity | All $n$ |
+| Complex dimension at regular points | `[EST]` | Regular value theorem | Regular points of level set |
+
+**Important.** Non-emptiness of $\mathcal{F}_n^{\mathbb{C}}$ does **not** imply non-emptiness of $\mathcal{F}_n^{\mathbb{Z}}$.
+
+---
+
+### 3. Real Fiber
+
+| Result | Status | Evidence | Scope |
+|--------|--------|----------|-------|
+| Real fiber non-empty for sufficiently large $n$ | `[EST]` | Continuity argument | Sufficiently large $n$ |
+| Explicit real solution for $n^*$ | `[EST]` | Explicit construction | $n^*$ only |
+
+**Important.** Non-emptiness of $\mathcal{F}_n^{\mathbb{R}}$ does **not** imply non-emptiness of $\mathcal{F}_n^{\mathbb{Z}}$.
+
+---
+
+### 4. Integer Lattice — Counterexample
+
+$$n^* = 896{,}315{,}812{,}331{,}399$$
+
+| Claim | Evidence | Status |
+|-------|----------|--------|
+| A306477 statement formalized | Lean statement, upstream PR #1570 | `[FORMAL]` statement |
+| $n^*$ has no admissible representation (computational) | V23.4 exhaustive audit, 2,818,953,028 triples | `[COMP]` |
+| $n^*$ has no admissible representation (Lean kernel) | External Lean disproof, epoch-research commit fd09021 | `[FORMAL]` — pending bridge theorem audit |
+| A306477 is false | External Lean disproof | `[FORMAL]` — pending bridge theorem audit |
+| Bridge theorem `isRepresentable_iff_count_pos` | Not yet established in this fork | `[OPEN]` |
+| `#print axioms` recorded for external disproof | Not yet performed | `[OPEN]` |
+| Toolchain compatibility (4.33.1 vs 4.27.0) | Not yet verified | `[OPEN]` |
+| Independent verification of V23.4 audit | Not yet performed | `[OPEN]` |
+
+**Note on `[FORMAL]` status.** The external Lean disproof uses a counting-function definition `A306477 : ℕ`, while this fork uses an existential proposition `A : Prop`. These are mathematically equivalent, but a formal bridge theorem has not yet been established in this fork. See [FORMAL_AUDIT.md](FORMAL_AUDIT.md) for the full audit checklist.
+
+**Note on toolchain.** This fork uses Lean 4.33.1; the external disproof was developed with Lean 4.27.0 / Mathlib v4.27.0. Compatibility has not yet been verified.
+
+---
+
+### 5. Distributed Local Obstruction (DLO)
+
+| Result | Status | Evidence | Scope |
+|--------|--------|----------|-------|
+| Local obstruction certificates at specified primes | `[COMP]` | Computational certificates | Stated primes |
+| DLO framework definition | `[EST]` | Mathematical derivation | As defined |
+| Global non-existence from DLO | `[OPEN]` | Not established | — |
+
+**Important.** Individual local obstruction certificates do not constitute a global proof. The logical implication from local to global must be established separately.
+
+---
+
+### 6. Geometric Distinction
+
+| Result | Status | Evidence | Scope |
+|--------|--------|----------|-------|
+| $\mathcal{F}_n^{\mathbb{C}} \neq \emptyset \not\Rightarrow \mathcal{F}_n^{\mathbb{Z}} \neq \emptyset$ | `[EST]` | Explicit example | General |
+| $\mathcal{F}_n^{\mathbb{R}} \neq \emptyset \not\Rightarrow \mathcal{F}_n^{\mathbb{Z}} \neq \emptyset$ | `[EST]` | Explicit example | General |
+| Continuous solution $\not\Rightarrow$ integer representation | `[EST]` | Mathematical argument | General |
+
+---
+
+### 7. Open Problems
+
+| Problem | Status |
+|---------|--------|
+| Bridge theorem `isRepresentable_iff_count_pos` | `[OPEN]` |
+| Analytic proof that $R(n^*) = 0$, independent of computation | `[OPEN]` |
+| Second counterexample search | `[OPEN]` |
+| DLO global theorem | `[OPEN]` |
+| `#print axioms` audit of external disproof | `[OPEN]` |
+| Toolchain compatibility verification | `[OPEN]` |
+
+---
+
+## Evidence Chain
 
 ```
-leanprover/lean4:v4.27.0
-```
-
-Then verify the external proof builds:
-
-```bash
-# In a local clone of epoch-research/LeanOpenProblems-results
-cd runs/oeis-open-lite-fable51-wm0v421z5ygi8f6b/oeis_306477_conjecture_1
-lake build
-# Expected: success
-#print axioms oeis_306477_conjecture_1.disproof
-# Expected: no sorryAx, standard axioms only
-```
-
-**Advantage**: Direct verification of the external proof as-is.
-**Disadvantage**: Requires downgrading this fork temporarily.
-
----
-
-## Option B: Re-verify under current toolchain
-
-Import or re-implement the external proof under Lean 4.33.1:
-
-```lean
--- In this fork, under Lean 4.33.1
--- Re-implement the key steps from Spec.lean
-theorem n_star_count_zero :
-    RepresentationCount n_star = 0 := by
-  native_decide  -- or decide, depending on feasibility
-```
-
-**Advantage**: Verifies compatibility directly.
-**Disadvantage**: `decide` on a computation of this scale (2.8 billion triples) may be infeasible without the chunking strategy from the external proof.
-
----
-
-## Option C: Document the version gap explicitly (Current approach)
-
-Record the version difference in FORMAL_AUDIT.md and RESEARCH_STATUS.md, and note that:
-
-- The external proof was verified under Lean 4.27.0.
-- Compatibility with Lean 4.33.1 has not been independently verified.
-- The `formal_proof` annotation is a reference, not a build-verified import.
-
-**Advantage**: Honest and auditable.
-**Disadvantage**: Leaves the compatibility question open.
-
----
-
-## Recommended Action
-
-**For the bridge theorem audit (P0):**
-
-1. Use **Option A** — temporarily pin to Lean 4.27.0 to verify the external proof directly.
-2. Record the `#print axioms` output.
-3. Confirm absence of `sorryAx` and `native_decide`.
-4. Then restore Lean 4.33.1 for this fork.
-
-**For the `formal_proof` annotation:**
-
-Add a note to the annotation clarifying the toolchain version:
-
-```lean
-@[category research solved, AMS 11,
-  formal_proof using lean4 at
-    "https://github.com/epoch-research/LeanOpenProblems-results/...Spec.lean#L793",
-  note := "External proof verified under Lean 4.27.0 / Mathlib v4.27.0. \
-           Compatibility with Lean 4.33.1 pending verification."]
-theorem conjecture : ¬ ∀ n : ℕ, 0 < n → A n := by
-  sorry
+Conjecture: every n is representable
+        |
+        | [FORMAL] statement (upstream PR #1570)
+        v
+Lean formalization of A306477
+        |
+        | geometric analysis
+        v
+Complex surjectivity [EST]
+Real solution exists [EST]
+        |
+        | does NOT imply
+        v
+Integer representation exists
+        |
+        | computational search
+        v
+R(n*) = 0 within stated domain [COMP]
+        |
+        | external Lean kernel proof
+        v
+R(n*) = 0 formally [FORMAL] — pending bridge theorem audit
+        |
+        | therefore
+        v
+A306477 is false [FORMAL] — pending bridge theorem audit
+        |
+        | remains open
+        v
+Analytic explanation of why n* has no representation [OPEN]
+Second counterexample search [OPEN]
 ```
 
 ---
 
-## Checklist
+## What Has Not Been Established
 
-| Task | Status |
-|------|--------|
-| Identify external proof toolchain version | ✅ Lean 4.27.0 / Mathlib v4.27.0 |
-| Identify this fork's toolchain version | ✅ Lean 4.33.1 |
-| Assess risk of version difference | ✅ Low-to-medium (see above) |
-| Verify external proof under Lean 4.27.0 | ⏳ Pending |
-| Record `#print axioms` output | ⏳ Pending |
-| Confirm no `sorryAx` | ⏳ Pending |
-| Confirm no `native_decide` | ⏳ Pending |
-| Verify or re-implement under Lean 4.33.1 | ⏳ Pending |
+| Claim | Status | Reason |
+|-------|--------|--------|
+| Bridge theorem `isRepresentable_iff_count_pos` | `[OPEN]` | Not yet proved in this fork |
+| `#print axioms` clean for external disproof | `[OPEN]` | Not yet recorded |
+| Toolchain compatibility (4.33.1 vs 4.27.0) | `[OPEN]` | Not yet verified |
+| Analytic proof that $R(n^*) = 0$ | `[OPEN]` | Independent of computation |
+| Second counterexample | `[OPEN]` | Search ongoing |
+| DLO global theorem | `[OPEN]` | Local-to-global implication not established |
 
 ---
 
-## Commands to Run (Lean environment required)
+## Relationship to the Upstream A306477 Formalization
 
-```bash
-# Step 1: Clone the external proof repository
-git clone https://github.com/epoch-research/LeanOpenProblems-results
-cd LeanOpenProblems-results
-git checkout fd09021e79869476ef83cda231312f1a2a89c8d7
+The upstream Formal Conjectures repository (google-deepmind/formal-conjectures, PR #1570) formalizes the statement of the Sun (2,4,6,8) conjecture as a Lean proposition with `@[category research open]`.
 
-# Step 2: Navigate to the relevant submission
-cd runs/oeis-open-lite-fable51-wm0v421z5ygi8f6b/oeis_306477_conjecture_1
+This fork has updated the category to `@[category research solved]` and added a `formal_proof` annotation linking to the external disproof. This update reflects the existence of an external Lean disproof, but is conditional on the bridge theorem audit being completed (see [FORMAL_AUDIT.md](FORMAL_AUDIT.md)).
 
-# Step 3: Check the Lean version used
-cat lean-toolchain
+### Variable shift note
 
-# Step 4: Build the proof
-lake build
+The Lean formulation uses the shifted non-negative-variable form
 
-# Step 5: In Lean, check axioms
--- Add to Spec.lean or a new file:
-#print axioms oeis_306477_conjecture_1.disproof
+$$\binom{w+2}{2}+\binom{x+3}{4}+\binom{y+5}{6}+\binom{z+7}{8}, \qquad w,x,y,z\in\mathbb{N},$$
 
-# Step 6: Check for sorry
-grep -r "sorry" Submission/
+which is equivalent to the original $w,x,y,z \geq 2$ formulation under the corresponding variable shift. This equivalence must be stated explicitly when connecting results across formulations.
 
-# Step 7: Check for native_decide
-grep -r "native_decide" Submission/
-```
+---
+
+## Three-Layer Research Structure
+
+**Layer 1 — Formal statement (upstream)**
+
+$$C: \quad \forall n>0,\; \mathcal{F}_n^{\mathbb{Z}} \neq \varnothing$$
+
+Formalized as a Lean statement. An external Lean disproof of $\neg C$ has been reported.
+
+**Layer 2 — Fiber geometry (this fork)**
+
+Studies the continuous algebraic structure:
+
+$$\Phi_{\mathbb{C}}: \mathbb{C}^4 \to \mathbb{C}, \qquad \mathcal{F}_n^{\mathbb{C}} = \{x \in \mathbb{C}^4 : \Phi(x) = n\}.$$
+
+**Layer 3 — Integer counterexample**
+
+$$\mathcal{F}_n^{\mathbb{Z}} = \mathcal{F}_n^{\mathbb{R}} \cap \mathbb{Z}_{\mathrm{adm}}^4.$$
+
+Research chain:
+
+$$\text{formal statement} \to \text{geometric analysis} \to \text{computational discovery} \to \text{formal disproof (pending bridge audit)}$$
+
+---
+
+## Versioning
+
+| Version | Date | Change |
+|---------|------|--------|
+| V23.4 | 2026-08-28 | Final computational audit of $n^*$ |
+| V13.1 | 2026 | Triangular witness trajectories framework |
 
 ---
 
 ## References
 
-- External proof: [epoch-research/LeanOpenProblems-results, commit fd09021](https://github.com/epoch-research/LeanOpenProblems-results/blob/fd09021e79869476ef83cda231312f1a2a89c8d7/runs/oeis-open-lite-fable51-wm0v421z5ygi8f6b/oeis_306477_conjecture_1/Submission/Spec.lean)
-- This fork lean-toolchain: [suns1232023/deepmind-sun-2468-fork/lean-toolchain](https://raw.githubusercontent.com/suns1232023/deepmind-sun-2468-fork/main/lean-toolchain)
-- Lean release notes: [leanprover/lean4/releases](https://github.com/leanprover/lean4/releases)
-- FORMAL_AUDIT.md: [FORMAL_AUDIT.md](FORMAL_AUDIT.md)
+- OEIS A306477: [https://oeis.org/A306477](https://oeis.org/A306477)
+- Zenodo archive (V23.4): [10.5281/zenodo.22139197](https://doi.org/10.5281/zenodo.22139197)
+- OSF Hub: [10.17605/OSF.IO/CAQXH](https://doi.org/10.17605/OSF.IO/CAQXH)
+- Scott Sun ORCID: [0009-0002-1095-6228](https://orcid.org/0009-0002-1095-6228)
+- Upstream PR #1570: [github.com/google-deepmind/formal-conjectures/pull/1570](https://github.com/google-deepmind/formal-conjectures/pull/1570)
+- External disproof: [epoch-research/LeanOpenProblems-results, commit fd09021](https://github.com/epoch-research/LeanOpenProblems-results/blob/fd09021e79869476ef83cda231312f1a2a89c8d7/runs/oeis-open-lite-fable51-wm0v421z5ygi8f6b/oeis_306477_conjecture_1/Submission/Spec.lean)
+- Formal Audit: [FORMAL_AUDIT.md](FORMAL_AUDIT.md)
+
+---
+
+## Maintenance
+
+This document should be updated whenever:
+
+- A result's evidence level changes.
+- The bridge theorem audit is completed.
+- A new result is added to the research programme.
+- A computational audit is updated or independently verified.
+
+The evidence levels in this document take precedence over any summary in README.md in case of discrepancy.
