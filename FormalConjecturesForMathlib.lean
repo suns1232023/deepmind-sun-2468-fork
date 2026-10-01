@@ -34,10 +34,14 @@ public import FormalConjecturesForMathlib.AlgebraicGeometry.EllipticCurve.Minima
 public import FormalConjecturesForMathlib.AlgebraicGeometry.EllipticCurve.Regulator
 public import FormalConjecturesForMathlib.AlgebraicGeometry.ProjectiveSpace
 public import FormalConjecturesForMathlib.AlgebraicGeometry.VectorBundle
+-- [Sun 2,4,6,8 Fiber Geometry Extension] Added smooth fiber & manifold analysis modules
+public import FormalConjecturesForMathlib.AlgebraicGeometry.FiberGeometry.SmoothFiber
 public import FormalConjecturesForMathlib.Analysis.Asymptotics.Basic
 public import FormalConjecturesForMathlib.Analysis.Equidistribution.ModOne
 public import FormalConjecturesForMathlib.Analysis.Fourier.SpectralSets
 public import FormalConjecturesForMathlib.Analysis.HasGaps
+-- [Sun 2,4,6,8 Fiber Geometry Extension] Added discriminant gap analysis for near-miss structures
+public import FormalConjecturesForMathlib.Analysis.DiscriminantGap
 public import FormalConjecturesForMathlib.Analysis.Matrix.Spectrum
 public import FormalConjecturesForMathlib.Analysis.Real.Cardinality
 public import FormalConjecturesForMathlib.Analysis.SpecialFunctions.AdditiveCharacter
@@ -179,6 +183,8 @@ public import FormalConjecturesForMathlib.NumberTheory.NumberField.FundamentalDi
 public import FormalConjecturesForMathlib.NumberTheory.NumberField.Quadratic
 public import FormalConjecturesForMathlib.NumberTheory.PisotNumber
 public import FormalConjecturesForMathlib.NumberTheory.PracticalNumbers
+-- [Sun 2,4,6,8 Fiber Geometry Extension] Added p-adic local obstruction & prime certificate modules
+public import FormalConjecturesForMathlib.NumberTheory.PAdicObstruction
 public import FormalConjecturesForMathlib.NumberTheory.PrimeGap
 public import FormalConjecturesForMathlib.NumberTheory.Primitive
 public import FormalConjecturesForMathlib.NumberTheory.SierpinskiNumber
