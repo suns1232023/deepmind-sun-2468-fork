@@ -4,8 +4,8 @@
 
 Thank you for your interest in contributing. This document covers two areas:
 
-1. **Upstream contribution rules** — how to contribute to the formal conjecture statements (following the upstream format).
-2. **Sun (2,4,6,8) research extension rules** — how to contribute to the independent research programme.
+- **Part I** — Upstream contribution rules (how to contribute conjecture statements following the upstream format).
+- **Part II** — Sun (2,4,6,8) research extension rules (how to contribute to the independent research programme).
 
 ---
 
@@ -17,7 +17,7 @@ These rules follow the [google-deepmind/formal-conjectures](https://github.com/g
 
 By submitting a contribution, you agree that it may be used under the terms of the [Apache License 2.0](LICENSE) (code) and [Creative Commons Attribution 4.0](LICENSE.md) (mathematical content).
 
-You must sign the [Google Contributor Licence Agreement (CLA)](https://cla.developers.google.com/) before your pull request can be merged.
+The upstream project requires contributors to sign the [Google Contributor Licence Agreement (CLA)](https://cla.developers.google.com/) before contributions can be accepted upstream. This fork preserves that requirement for contributions intended to remain compatible with the upstream contribution model.
 
 ## Ways to Contribute
 
@@ -124,19 +124,25 @@ All results in the Sun extension must carry an explicit evidence label. See [REA
 
 | Label | Meaning |
 |-------|---------|
-| `[FORMAL]` | Lean kernel-checked proof |
-| `[EST]` | Mathematically established by explicit derivation |
+| `[FORMAL]` | Lean 4 kernel-checked proof |
+| `[EST]` | Mathematically established by an explicit derivation |
 | `[COMP]` | Computationally verified within a stated finite domain |
 | `[NUM]` | Numerical or heuristic evidence |
 | `[OPEN]` | Open or conjectural |
 
-**`[EST]` does not imply `[FORMAL]`.** Do not use `[EST]` to imply Lean verification unless a `[FORMAL]` label is also present.
+**`[EST]` does not equal `[FORMAL]`.** Do not use `[EST]` to imply Lean verification unless a `[FORMAL]` label is also present.
 
 ## Geometric Distinction
 
 Contributions must respect the following hierarchy:
 
-$$\mathcal{F}_n^{\mathbb{C}} \neq \emptyset \quad \not\Rightarrow \quad \mathcal{F}_n^{\mathbb{R}} \neq \emptyset \quad \not\Rightarrow \quad \mathcal{F}_n^{\mathbb{Z}} \neq \emptyset.$$
+$$
+\mathcal{F}_n^{\mathbb{C}} \neq \emptyset
+\quad \not\Rightarrow \quad
+\mathcal{F}_n^{\mathbb{R}} \neq \emptyset
+\quad \not\Rightarrow \quad
+\mathcal{F}_n^{\mathbb{Z}} \neq \emptyset.
+$$
 
 Do not conflate:
 
@@ -187,8 +193,6 @@ All computational contributions must be reproducible. Provide:
 
 ## Important Distinctions
 
-The following distinctions must be maintained in all contributions:
-
 | Claim type | Correct label | What it does NOT imply |
 |------------|---------------|------------------------|
 | Lean kernel-checked proof | `[FORMAL]` | — |
@@ -204,3 +208,4 @@ The following distinctions must be maintained in all contributions:
 - Open an issue for questions about the upstream conjecture format.
 - Open an issue tagged `sun-extension` for questions about the research programme.
 - See [RESEARCH_STATUS.md](RESEARCH_STATUS.md) for the current evidence status of all results.
+
